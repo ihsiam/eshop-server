@@ -1,7 +1,6 @@
 /* eslint-disable no-underscore-dangle */
 // dependencies
 const { Schema, model } = require('mongoose');
-const jwt = require('jsonwebtoken');
 
 // schema
 const userSchema = new Schema({
@@ -58,13 +57,6 @@ const userSchema = new Schema({
     resetPasswordToken: String,
     resetPasswordTime: Date,
 });
-
-// token generator
-userSchema.methods.getJwtToken = () =>
-    // eslint-disable-next-line implicit-arrow-linebreak
-    jwt.sign({ id: this._id }, process.env.JWT_SECRET, {
-        expiresIn: '24hr',
-    });
 
 // model
 const User = model('User', userSchema);

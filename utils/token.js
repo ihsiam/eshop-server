@@ -12,7 +12,10 @@ exports.activationToken = (user) => {
 
 // login token
 exports.loginToken = (user, statusCode, res) => {
-    const token = user.getJwtToken();
+    const { email } = user;
+    const token = jwt.sign({ email }, process.env.JWT_SECRET, {
+        expiresIn: '24h',
+    });
     const options = {
         expires: new Date(Date.now() + 24 * 60 * 60 * 1000),
         httpOnly: true,

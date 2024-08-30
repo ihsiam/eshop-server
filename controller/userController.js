@@ -8,6 +8,7 @@ const upload = require('../utils/multer');
 const User = require('../models/userModel');
 const { activationToken, loginToken } = require('../utils/token');
 const SendMail = require('../utils/sendMail');
+const isAuth = require('../middleware/auth');
 require('dotenv').config();
 
 const saltRounds = 10;
@@ -128,4 +129,16 @@ UserRouter.post('/login', async (req, res) => {
     }
 });
 
+// get user data
+UserRouter.get('/userInfo', isAuth, async (req, res) => {
+    try {
+        if (req.user) {
+            return res.status(200).json(req.user);
+        }
+        return res.status(400).json({ msg: 'user not found' });
+    } catch (err) {
+        console.log(err);
+        return res.status(500).json(err);
+    }
+});
 module.exports = UserRouter;
