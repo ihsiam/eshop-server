@@ -5,6 +5,7 @@ const bodyParser = require('body-parser');
 const cookieParser = require('cookie-parser');
 const ConnectDb = require('./config/db');
 const UserRouter = require('./controller/userController');
+const ShopRouter = require('./controller/shopController');
 require('dotenv').config();
 
 // app define
@@ -31,6 +32,7 @@ ConnectDb();
 
 // routes
 app.use('/api/v2/user', UserRouter);
+app.use('/api/v2/shop', ShopRouter);
 
 // 404 error handle
 app.use((req, res, next) => {
@@ -41,6 +43,7 @@ app.use((req, res, next) => {
 // server error handle
 app.use((req, res, err, next) => {
     res.send(`Err: ${err}`);
+    console.log(err);
     next();
 });
 

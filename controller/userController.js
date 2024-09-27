@@ -47,7 +47,7 @@ UserRouter.post('/create-user', upload.single('file'), async (req, res) => {
 
         // activation token generate
         const token = activationToken(user);
-        const activationUrl = `http://localhost:5173/activation/${token}`;
+        const activationUrl = `http://localhost:5173/user/activation/${token}`;
 
         // send activation token
         await SendMail({
@@ -136,6 +136,22 @@ UserRouter.get('/userInfo', isAuth, async (req, res) => {
             return res.status(200).json(req.user);
         }
         return res.status(400).json({ msg: 'user not found' });
+    } catch (err) {
+        console.log(err);
+        return res.status(500).json(err);
+    }
+});
+
+// logout
+UserRouter.get('/logOut', isAuth, async (req, res) => {
+    try {
+        return res
+            .cookie('token', null, {
+                expires: new Date(Date.now()),
+                httpOnly: true,
+            })
+            .status(200)
+            .json({ msg: 'Logged out' });
     } catch (err) {
         console.log(err);
         return res.status(500).json(err);
